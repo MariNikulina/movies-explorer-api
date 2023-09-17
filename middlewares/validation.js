@@ -10,12 +10,10 @@ const validationSchemaSignup = celebrate({
 });
 
 const validationSchemaSignIn = celebrate({
-  body: Joi.object()
-    .keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
-    })
-    .unknown(true),
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
 });
 
 const validationSchemaUpdateProfile = celebrate({
@@ -30,7 +28,7 @@ const validationSchemaCreateMovie = celebrate({
     country: Joi.string().required(),
     director: Joi.string().required(),
     duration: Joi.number().integer().required(),
-    year: Joi.number().integer().required(),
+    year: Joi.string().required(),
     description: Joi.string().required(),
     image: Joi.string().required().pattern(REGEX),
     trailerLink: Joi.string().required().pattern(REGEX),
@@ -43,7 +41,7 @@ const validationSchemaCreateMovie = celebrate({
 
 const validationSchemaDeleteMovie = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24).hex(),
+    id: Joi.string().alphanum().length(24).hex(),
   }),
 });
 

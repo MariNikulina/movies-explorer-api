@@ -16,7 +16,6 @@ const UnauthorizedError = require("../errors/unauthorized-error");
 
 const createUser = (req, res, next) => {
   const { email, password, name } = req.body;
-
   if (!email || !password || !name) {
     return next(
       new BadRequestError(
@@ -91,7 +90,7 @@ const updateProfile = (req, res, next) => {
           ),
         );
       }
-      if (err.name === "MongoError" && err.code === 11000) {
+      if (err.code === 11000) {
         return next(
           new ConflictError(
             "При обновлении профиля передан email, который уже существует на сервере",

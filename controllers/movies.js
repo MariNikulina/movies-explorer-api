@@ -4,12 +4,17 @@ const MovieModel = require("../models/movie");
 
 const BadRequestError = require("../errors/bad-request-error");
 const NotFoundError = require("../errors/not-found-error");
-const CoflictError = require("../errors/conflict-error");
+const ConflictError = require("../errors/conflict-error");
 
-const getMovies = (req, res, next) =>
+const getMovies = (req, res, next) => {
+  const { _id } = req.user;
   MovieModel.find()
-    .then((movies) => res.send(movies))
+    .then((movies) => {
+      const savedMovie = movies.filter((movie) => movie.owner.equals(_id));
+      return res.send(savedMovie);
+    })
     .catch(next);
+};
 
 const createMovie = (req, res, next) => {
   const { _id } = req.user;
@@ -62,7 +67,7 @@ const deleteMovieById = (req, res, next) => {
         return next(new NotFoundError("Фильм с указанным _id не найден"));
       }
       if (!movie.owner.equals(_id)) {
-        return next(new CoflictError("Попытка удалить чужой фильм"));
+        return next(new ConflictError("Попытка удалить чужой фильм"));
       }
       return MovieModel.findByIdAndRemove(id).then((movieForRemove) =>
         res.send(movieForRemove),

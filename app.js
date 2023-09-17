@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
+const { errors } = require("celebrate");
 const errorHandler = require("./middlewares/error-handler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { limiter } = require("./middlewares/limiter");
@@ -21,8 +22,6 @@ mongoose
 
 const app = express();
 
-app.use(limiter);
-
 app.use(cookieParser());
 
 app.use(bodyParser.json());
@@ -30,12 +29,17 @@ app.use(bodyParser.json());
 // подключаем логгер запросов
 app.use(requestLogger);
 
+app.use(limiter);
+
 app.use(helmet());
 
 app.use(routers);
 
 // подключаем логгер ошибок
 app.use(errorLogger);
+
+// обработчик ошибок celebrate
+app.use(errors());
 
 // централизованная обработка ошибок
 app.use(errorHandler);
