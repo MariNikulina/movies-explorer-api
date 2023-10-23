@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -21,6 +22,16 @@ mongoose
   });
 
 const app = express();
+
+const ENV = "http://localhost:3000";
+
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    ENV,
+  }),
+);
 
 app.use(cookieParser());
 
