@@ -120,7 +120,11 @@ const login = (req, res, next) => {
           expiresIn: "7d",
         });
         return res
-          .cookie("jwt", token, { maxAge: 3600000, httpOnly: true })
+          .cookie("jwt", token, {
+            maxAge: 3600000,
+            httpOnly: true,
+            SameSite: "None",
+          })
           .send({ jwt: "token" });
       });
     })
