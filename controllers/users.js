@@ -123,6 +123,7 @@ const login = (req, res, next) => {
           .cookie("jwt", token, {
             maxAge: 3600000,
             httpOnly: true,
+            secure: true,
             sameSite: "none",
           })
           .send({ jwt: "token" });
